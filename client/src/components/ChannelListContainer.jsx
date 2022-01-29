@@ -40,12 +40,34 @@ const CompanyHeader = () => (
 
 const ChannelListContainer = () => {
 
+    // Get the data sent by backend via cookies
+    const { client } = useChatContext();
+
+    const logout = () => {
+
+        // Logout of the chat system by clearing the cookies
+        cookies.remove("token");
+        cookies.remove('userId');
+        cookies.remove('username');
+        cookies.remove('fullName');
+        cookies.remove('avatarURL');
+        cookies.remove('hashedPassword');
+        cookies.remove('phoneNumber');
+
+        // After the cookies are cleared, redirect the user to the login page
+        window.location.reload();
+    };
+
+    // Filters the channels that are not direct messages
+    const filters = { members: { $in: [client.userID] } };
+
+
   // Return the sidebar and the list of channels
   return (
     <>
         {/* Renders the Sidebar (with claender and logout button)
         name/users on the left navigation panel  */}
-        <SideBar />      {/* Passing the logout function as a prop to the SideBar component */}
+        <SideBar logout={logout} />    {/* Passing the logout function as a prop to the SideBar component */}
         <div className="channel-list__list__wrapper">
             <CompanyHeader /> {/* Renders the company name / users on the left navigation panel */}
             <ChannelSearch /> {/* Creates a Search Bar for the user to search for a channel */}

@@ -6,7 +6,7 @@ import Cookies from 'universal-cookie';
 
 import { ChannelListContainer, ChannelContainer, Auth } from "./components";
 
-// import 'stream-chat-react/dist/css/index.css';
+import 'stream-chat-react/dist/css/index.css';
 import './App.css';
 
 
@@ -40,10 +40,11 @@ if (authToken) {
 
 // This App function is the main function that renders the whole app
 const App = () => {
-    //
-    // const [createType, setCreateType] = useState('');
-    // const [isCreating, setIsCreating] = useState(false);
-    // const [isEditing, setIsEditing] = useState(false);
+
+    // Funtionalities
+    const [createType, setCreateType] = useState('');       // If creating a chatroom, what type is it?
+    const [isCreating, setIsCreating] = useState(false);    // Is the User creating a new chatroom?
+    const [isEditing, setIsEditing] = useState(false);      // Is the User editing a chatroom?
 
     // If no auth-token is found, show the Auth component
     if (!authToken) return <Auth />;
@@ -53,17 +54,17 @@ const App = () => {
         <div className="app__wrapper">
             <Chat client={client} theme="team light">
                 <ChannelListContainer 
-                    // isCreating={isCreating}
-                    // setIsCreating={setIsCreating}
-                    // setCreateType={setCreateType}
-                    // setIsEditing={setIsEditing}
+                    isCreating={isCreating}
+                    setIsCreating={setIsCreating}
+                    setCreateType={setCreateType}
+                    setIsEditing={setIsEditing}
                 />
                 <ChannelContainer 
-                    // isCreating={isCreating}
-                    // setIsCreating={setIsCreating}
-                    // isEditing={isEditing}
-                    // setIsEditing={setIsEditing}
-                    // createType={createType}
+                    isCreating={isCreating}
+                    setIsCreating={setIsCreating}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    createType={createType}
                 />
             </Chat>
         </div>
