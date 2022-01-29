@@ -1,7 +1,7 @@
 // It is basically our whole sidebar containing list of channels and direct messages
 
 // Import all required libraries
-import React from "react";
+import React, { useState } from 'react';
 import { ChannelList, useChatContext } from "stream-chat-react";
 import Cookies from "universal-cookie";
 
@@ -38,7 +38,15 @@ const CompanyHeader = () => (
     </div>
 )
 
-const ChannelListContainer = () => {
+const customChannelTeamFilter = (channels) => {
+    return channels.filter((channel) => channel.type === 'team');
+}
+
+const customChannelMessagingFilter = (channels) => {
+    return channels.filter((channel) => channel.type === 'messaging');
+}
+
+const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEditing }) => {
 
     // Get the data sent by backend via cookies
     const { client } = useChatContext();
@@ -62,66 +70,105 @@ const ChannelListContainer = () => {
     const filters = { members: { $in: [client.userID] } };
 
 
-  // Return the sidebar and the list of channels
-  return (
-    <>
-        {/* Renders the Sidebar (with claender and logout button)
+    // Return the sidebar and the list of channels
+    return (
+        <>
+            {/* Renders the Sidebar (with claender and logout button)
         name/users on the left navigation panel  */}
-        <SideBar logout={logout} />    {/* Passing the logout function as a prop to the SideBar component */}
-        <div className="channel-list__list__wrapper">
-            <CompanyHeader /> {/* Renders the company name / users on the left navigation panel */}
-            <ChannelSearch /> {/* Creates a Search Bar for the user to search for a channel */}
-            {/* Renders the list of channels */}
-            {/* For group messaging */}
-            <ChannelList
-                filters={{  }}
-                channelRenderFilterFn={() => { }}
-                // Render a custom list
-                List={(listProps) => (
-                    // This is our CUSTOM TeamChannelList apart from the ChannelList provided by StreamChat
-                    <TeamChannelList
-                        // Passes all the props to the TeamChannelList, that were
-                        // supposed to be passed to the ChannelList provided by StreamChat
-                        {...listProps}
-                        type="team"
-                    />
-                )}
-                Preview={(previewProps) => (
-                    <TeamChannelPreview
-                        // Passes all the props to the TeamChannelPreview, that were
-                        // supposed to be passed to the ChannelPreview provided by StreamChat
-                        {...previewProps}
-                        type="team"
-                    />
-                )}
-            />
+            <SideBar logout={logout} />    {/* Passing the logout function as a prop to the SideBar component */}
+            <div className="channel-list__list__wrapper">
+                <CompanyHeader /> {/* Renders the company name / users on the left navigation panel */}
+                <ChannelSearch /> {/* Creates a Search Bar for the user to search for a channel */}
+                {/* Renders the list of channels */}
+                {/* For group messaging */}
+                <ChannelList
+                    filters={filters}
+                    // channelRenderFilterFn={customChannelTeamFilter}       /////////////////////////////////////////////////////////////////////////
+                    channelRenderFilterFn={() => { }}       ///////////////////////////////////////////////////////////////////////////////////////////
+                    // Render a custom list
+                    List={(listProps) => (
+                        // This is our CUSTOM TeamChannelList apart from the ChannelList provided by StreamChat
+                        <TeamChannelList
+                            // Passes all the props to the TeamChannelList, that were
+                            // supposed to be passed to the ChannelList provided by StreamChat
+                            {...listProps}
+                            type="team"
+                            isCreating={isCreating}
+                            setIsCreating={setIsCreating}
+                            setCreateType={setCreateType}
+                            setIsEditing={setIsEditing}
+                        />
+                    )}
+                    Preview={(previewProps) => (
+                        <TeamChannelPreview
+                            // Passes all the props to the TeamChannelPreview, that were
+                            // supposed to be passed to the ChannelPreview provided by StreamChat
+                            {...previewProps}
+                            type="team"
+                        />
+                    )}
+                />
 
-            {/* For direct messaging */}
-            <ChannelList
-                filters={{  }}
-                channelRenderFilterFn={() => { }}
-                // Render a custom list
-                List={(listProps) => (
-                    // This is our CUSTOM TeamChannelList apart from the ChannelList provided by StreamChat
-                    <TeamChannelList
-                        // Passes all the props to the TeamChannelList, that were
-                        // supposed to be passed to the ChannelList provided by StreamChat
-                        {...listProps}
-                        type="messaging"
-                    />
-                )}
-                Preview={(previewProps) => (
-                    <TeamChannelPreview
-                        // Passes all the props to the TeamChannelPreview, that were
-                        // supposed to be passed to the ChannelPreview provided by StreamChat
-                        {...previewProps}
-                        type="messaging"
-                    />
-                )}
-            />
-        </div>
-    </>
-);
+                {/* For direct messaging */}
+                <ChannelList
+                    filters={filters}
+                    channelRenderFilterFn={customChannelMessagingFilter}
+                    // Render a custom list
+                    List={(listProps) => (
+                        // This is our CUSTOM TeamChannelList apart from the ChannelList provided by StreamChat
+                        <TeamChannelList
+                            // Passes all the props to the TeamChannelList, that were
+                            // supposed to be passed to the ChannelList provided by StreamChat
+                            {...listProps}
+                            type="messaging"
+                            isCreating={isCreating}
+                            setIsCreating={setIsCreating}
+                            setCreateType={setCreateType}
+                            setIsEditing={setIsEditing}
+                        />
+                    )}
+                    Preview={(previewProps) => (
+                        <TeamChannelPreview
+                            // Passes all the props to the TeamChannelPreview, that were
+                            // supposed to be passed to the ChannelPreview provided by StreamChat
+                            {...previewProps}
+                            type="messaging"
+                        />
+                    )}
+                />
+            </div>
+        </>
+    );
+};
+
+
+const ChannelListContainer = ({ setCreateType, setIsCreating, setIsEditing }) => {
+    const [toggleContainer, setToggleContainer] = useState(false);
+
+    return (
+        <>
+            <div className="channel-list__container">
+                <ChannelListContent
+                    setIsCreating={setIsCreating}
+                    setCreateType={setCreateType}
+                    setIsEditing={setIsEditing}
+                />
+            </div>
+
+            <div className="channel-list__container-responsive"
+                style={{ left: toggleContainer ? "0%" : "-89%", backgroundColor: "#005fff" }}
+            >
+                <div className="channel-list__container-toggle" onClick={() => setToggleContainer((prevToggleContainer) => !prevToggleContainer)}>
+                </div>
+                <ChannelListContent
+                    setIsCreating={setIsCreating}
+                    setCreateType={setCreateType}
+                    setIsEditing={setIsEditing}
+                    setToggleContainer={setToggleContainer}
+                />
+            </div>
+        </>
+    );
 };
 
 // Export the ChannelListContainer
