@@ -46,7 +46,7 @@ const customChannelMessagingFilter = (channels) => {
     return channels.filter((channel) => channel.type === 'messaging');
 }
 
-const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEditing }) => {
+const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEditing, setToggleContainer }) => {
 
     // Get the data sent by backend via cookies
     const { client } = useChatContext();
@@ -83,8 +83,7 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
                 {/* For group messaging */}
                 <ChannelList
                     filters={filters}
-                    // channelRenderFilterFn={customChannelTeamFilter}       /////////////////////////////////////////////////////////////////////////
-                    channelRenderFilterFn={() => { }}       ///////////////////////////////////////////////////////////////////////////////////////////
+                    channelRenderFilterFn={customChannelTeamFilter}       /////////////////////////////////////////////////////////////////////////
                     // Render a custom list
                     List={(listProps) => (
                         // This is our CUSTOM TeamChannelList apart from the ChannelList provided by StreamChat
@@ -97,6 +96,7 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
                             setIsCreating={setIsCreating}
                             setCreateType={setCreateType}
                             setIsEditing={setIsEditing}
+                            setToggleContainer={setToggleContainer}
                         />
                     )}
                     Preview={(previewProps) => (
@@ -104,6 +104,9 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
                             // Passes all the props to the TeamChannelPreview, that were
                             // supposed to be passed to the ChannelPreview provided by StreamChat
                             {...previewProps}
+                            setIsCreating={setIsCreating}
+                            setIsEditing={setIsEditing}
+                            setToggleContainer={setToggleContainer}
                             type="team"
                         />
                     )}
@@ -125,6 +128,7 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
                             setIsCreating={setIsCreating}
                             setCreateType={setCreateType}
                             setIsEditing={setIsEditing}
+                            setToggleContainer={setToggleContainer}
                         />
                     )}
                     Preview={(previewProps) => (
@@ -132,6 +136,9 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
                             // Passes all the props to the TeamChannelPreview, that were
                             // supposed to be passed to the ChannelPreview provided by StreamChat
                             {...previewProps}
+                            setIsCreating={setIsCreating}
+                            setIsEditing={setIsEditing}
+                            setToggleContainer={setToggleContainer}
                             type="messaging"
                         />
                     )}
@@ -147,6 +154,7 @@ const ChannelListContainer = ({ setCreateType, setIsCreating, setIsEditing }) =>
 
     return (
         <>
+            {/* Channel-Lists on SideBar for Desktop version */}
             <div className="channel-list__container">
                 <ChannelListContent
                     setIsCreating={setIsCreating}
@@ -155,6 +163,7 @@ const ChannelListContainer = ({ setCreateType, setIsCreating, setIsEditing }) =>
                 />
             </div>
 
+            {/* Channel-Lists on SideBar for Mobile version */}
             <div className="channel-list__container-responsive"
                 style={{ left: toggleContainer ? "0%" : "-89%", backgroundColor: "#005fff" }}
             >
@@ -170,6 +179,7 @@ const ChannelListContainer = ({ setCreateType, setIsCreating, setIsEditing }) =>
         </>
     );
 };
+
 
 // Export the ChannelListContainer
 export default ChannelListContainer;

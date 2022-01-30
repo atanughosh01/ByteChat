@@ -44,15 +44,15 @@ const Auth = () => {
         e.preventDefault();
 
         // Get all the user-data from the form that users have filled
-        const { fullName, username, password, phoneNumber, avatarURL } = form;
+        const { username, password, phoneNumber, avatarURL } = form;
 
         // Get the URL
         const URL = "http://localhost:5000/auth";
 
         // Make a request to the backend to signup or login the user and pass the form-data to the backend
         // Based on the option chosen (signup, login) the request is sent to TWO DIFFERENT ENDPOINTS (URL-s)
-        const { data: { token, userId, hashedPassword } } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
-            username, password, fullName, phoneNumber, avatarURL,
+        const { data: { token, userId, hashedPassword, fullName } } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
+            username, password, fullName: form.fullName, phoneNumber, avatarURL,
         });
 
         // Tokens are stored in the cookies in case of login
