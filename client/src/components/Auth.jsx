@@ -47,8 +47,10 @@ const Auth = () => {
         const { username, password, phoneNumber, avatarURL } = form;
 
         // Get the URL
-        const URL = "http://localhost:5000/auth";
+        // const URL = "http://localhost:5000/auth";
+        const URL = "https://byte-chat-app.herokuapp.com/auth";
 
+        
         // Make a request to the backend to signup or login the user and pass the form-data to the backend
         // Based on the option chosen (signup, login) the request is sent to TWO DIFFERENT ENDPOINTS (URL-s)
         const { data: { token, userId, hashedPassword, fullName } } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
