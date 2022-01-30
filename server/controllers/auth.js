@@ -2,7 +2,6 @@
 const { connect } = require('getstream');
 const bcrypt = require('bcrypt');
 const StreamChat = require('stream-chat').StreamChat;
-// const StreamChat = require('stream-chat');
 const crypto = require('crypto');
 
 // dotenv is a module that allows us to access the environment variables
@@ -84,5 +83,5 @@ const login = async (req, res) => {
 };
 
 
-// Exports the functions
+// Exports the backend authenticator
 module.exports = { signup, login };
