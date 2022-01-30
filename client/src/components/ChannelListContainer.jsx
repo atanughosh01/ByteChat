@@ -78,7 +78,7 @@ const ChannelListContent = ({ isCreating, setIsCreating, setCreateType, setIsEdi
             <SideBar logout={logout} />    {/* Passing the logout function as a prop to the SideBar component */}
             <div className="channel-list__list__wrapper">
                 <CompanyHeader /> {/* Renders the company name / users on the left navigation panel */}
-                <ChannelSearch /> {/* Creates a Search Bar for the user to search for a channel */}
+                <ChannelSearch setToggleContainer={setToggleContainer} /> {/* Creates a Search Bar for the user to search for a channel */}
                 {/* Renders the list of channels */}
                 {/* For group messaging */}
                 <ChannelList
