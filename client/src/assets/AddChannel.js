@@ -11,7 +11,7 @@ export const AddChannel = ({ setCreateType, setIsCreating, setIsEditing, setTogg
       setCreateType(type);
       setIsCreating((prevState) => !prevState);
       setIsEditing(false);
-      if(setToggleContainer) setToggleContainer((prevState) => !prevState) 
+      if (setToggleContainer) setToggleContainer((prevState) => !prevState)
     }}
   >
     <path
