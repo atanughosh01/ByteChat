@@ -7,7 +7,8 @@ const { signup, login } = require('../controllers/auth.js');
 // import router from express
 const router = express.Router();
 
-// Both routes are post-routes as post-routes can send payloads from frontend to backend
+// both of the routes are post-routes 
+// beacuse these can send payloads from frontend to backend
 router.post('/signup', signup);
 router.post('/login', login);
 

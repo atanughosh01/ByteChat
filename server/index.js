@@ -1,15 +1,13 @@
-const express = require('express');     // import express module
-const cors = require('cors');           // import Cross-Origin Request Sharing module
-
-const authRoutes = require('./routes/auth.js');  // import routes for authentication
-
-const app = express();                  // Create an instance of express
+const express = require('express');
+const cors = require('cors');
+const authRoutes = require('./routes/auth.js');
+const app = express();
 const PORT = process.env.PORT || 5000;  // use process.env.PORT if available else use PORT 5000
 
-// This is going to allow us to call the env variables right inside our NODE application
+// To call the env variables from right inside our NODE application
 require('dotenv').config();
 
-// enviroment variables
+// Enviroment constants
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
@@ -19,16 +17,15 @@ const twilioClient = require('twilio')(accountSid, authToken);
 
 // Middlewares
 app.use(cors());                // Enables Cross-Origin Request Sharing
-app.use(express.json());        // Allows us to parse JSON payloads from the Frontend to the Backend
-app.use(express.urlencoded());  // Only parses urlencoded bodies and only looks at requests where the Content-Type header matches the type option
+app.use(express.json());        // Allows us to parse JSON payloads transferred from the Frontend to the Backend
+app.use(express.urlencoded());  // Parses urlencoded bodies and looks at requests where the Content-Type header matches the type option
 
 // Routes
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-
-// Handles the route responsible for msg alert on user's phone
+// Handles the route responsible for push-notification on user's phone
 app.post('/', (req, res) => {
 
     // Receives the payloads from the Frontend
@@ -45,22 +42,20 @@ app.post('/', (req, res) => {
                 // Send the alert msg only if the user is OFFLINE / Not using the app
                 if (!user.online) {
                     twilioClient.messages.create({
-                        // Display the message on the phone via notification
                         body: `You have a new message from ${message.user.fullName} - ${message.text}`,
                         messagingServiceSid: messagingServiceSid,
-                        to: user.phoneNumber    // Send the message to the user's phone number
-                        // N.B. => This is why we're prompting every user to enter their phnNo. during signup
+                        to: user.phoneNumber
                     })
                         .then(() => console.log('Message sent!'))
                         .catch((err) => console.log(err));
                 }
             });
 
-        // Send the success response back to the Frontend
+        // Message sending was successfull
         return res.status(200).send('Message sent!');
     }
 
-    // Else if no new msg is created send the response back to the Frontend
+    // No event was triggered
     return res.status(200).send('Not a new message request');
 });
 

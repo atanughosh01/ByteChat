@@ -27,10 +27,10 @@ const signup = async (req, res) => {
         // Generating an encrypted password with specified salt (level of encryption = 10)
         const hashedPassword = await bcrypt.hash(password, 10); // 10 defines how much encrypted the password will be
 
-        // // Using the serverClient to generate a new user token
+        // Using the serverClient to generate a new user token
         const token = serverClient.createUserToken(userId);
 
-        // // Sets the response header by passing the attributes of the json() method
+        // Sets the response header by passing the attributes of the json() method
         res.status(200).json({ token, fullName, username, userId, hashedPassword, phoneNumber });
 
     } catch (error) {
