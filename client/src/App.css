@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #005fff;
-    --primary-color-alpha: #005fff1a;
+    --primary-color: #503d5f;
+    --primary-color-alpha: #560f771a;
   }
   
   html,
@@ -27,7 +27,7 @@
     justify-content: center;
   
     padding: 2rem;
-    background: #005fff;
+    background: #4035dd;
   }
   
   .auth__form-container_image {
